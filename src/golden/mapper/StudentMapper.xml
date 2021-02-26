@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="golden.mapper.StudentMapper">
+  <resultMap id="BaseResultMap" type="golden.model.Student">
+    <id column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="student_number" jdbcType="VARCHAR" property="studentNumber" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+   <resultMap id="ReturnResultMap" type="golden.model.Student">
+    <id column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="student_number" jdbcType="VARCHAR" property="studentNumber" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+   </resultMap>
+  <sql id="Base_Column_List">
+    student_id, name, student_number, class_name, gender, area, phone_number, image, 
+    password
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where student_id = #{studentId,jdbcType=INTEGER}
+  </select>
+  <select id="sel_stu_by_stu_number" parameterType="String" resultMap="BaseResultMap">
+    select 
+    *
+    from student
+    where student_number = #{stu_num,jdbcType=VARCHAR}
+  </select>
+  <select id="get_all_stu"  resultMap="ReturnResultMap">
+    select 
+    student_id,name,student_number,class_name,gender,area,phone_number,image
+    from student
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from student
+    where student_id = #{stu_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="golden.model.Student">
+    insert into student (student_id, name, student_number, 
+      class_name, gender, area, 
+      phone_number, image, password
+      )
+    values (#{studentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{studentNumber,jdbcType=VARCHAR}, 
+      #{className,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{area,jdbcType=INTEGER}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="golden.model.Student">
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="studentNumber != null">
+        student_number,
+      </if>
+      <if test="className != null">
+        class_name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="studentNumber != null">
+        #{studentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="golden.model.Student">
+    update student
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="studentNumber != null">
+        student_number = #{studentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where student_id = #{studentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="golden.model.Student">
+    update student
+    set name = #{name,jdbcType=VARCHAR},
+      student_number = #{studentNumber,jdbcType=VARCHAR},
+      class_name = #{className,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      area = #{area,jdbcType=INTEGER},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR}
+    where student_id = #{studentId,jdbcType=INTEGER}
+  </update>
+</mapper>

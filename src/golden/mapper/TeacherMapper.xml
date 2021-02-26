@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="golden.mapper.TeacherMapper">
+  <resultMap id="BaseResultMap" type="golden.model.Teacher">
+    <id column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="teacher_number" jdbcType="VARCHAR" property="teacherNumber" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+  </resultMap>
+  
+  
+   <resultMap id="chat_list" type="golden.tempmodel.ChatList">
+    <id column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="tea_name" jdbcType="VARCHAR" property="tea_name" />
+    <result column="image" jdbcType="VARCHAR" property="tea_image" />
+    <result column="cou_name" jdbcType="VARCHAR" property="cou_name" />
+    </resultMap>
+  
+  <sql id="Base_Column_List">
+    teacher_id, name, phone_number, email, password, teacher_number, image
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from teacher
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="sel_tea_by_tea_number" parameterType="String" resultMap="BaseResultMap">
+    select 
+    *
+    from teacher
+    where teacher_number = #{tea_number,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="get_chat_list" resultMap="chat_list" parameterType="String">
+  select *,c.name as cou_name,t.name as tea_name from course c, teacher t,student_course s  where s.course_number=c.course_number and c.teacher_id=t.teacher_id and s.student_number=#{stu_num}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from teacher
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="golden.model.Teacher">
+    insert into teacher (teacher_id, name, phone_number, 
+      email, password, teacher_number, 
+      image)
+    values (#{teacherId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{teacherNumber,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="golden.model.Teacher">
+    insert into teacher
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="teacherId != null">
+        teacher_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="teacherNumber != null">
+        teacher_number,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="teacherId != null">
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNumber != null">
+        #{teacherNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="golden.model.Teacher">
+    update teacher
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNumber != null">
+        teacher_number = #{teacherNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="golden.model.Teacher">
+    update teacher
+    set name = #{name,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      teacher_number = #{teacherNumber,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR}
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="upd_tea" parameterType="golden.model.Teacher">
+    update teacher
+    set name = #{name,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR}
+      where teacher_number = #{teacherNumber,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="upd_pwd" parameterType="golden.model.Teacher">
+    update teacher
+    set password = #{password,jdbcType=VARCHAR}
+      where teacher_number = #{teacherNumber,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="upd_ima" parameterType="golden.tempmodel.Tea_image">
+    update teacher set
+      image = #{image,jdbcType=VARCHAR}
+      where teacher_number = #{teacherNumber,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

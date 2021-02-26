@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="golden.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="golden.model.Course">
+    <id column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="course_number" jdbcType="VARCHAR" property="courseNumber" />
+    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+    <result column="outline" jdbcType="VARCHAR" property="outline" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="current_number" jdbcType="INTEGER" property="currentNumber" />
+    <result column="max_number" jdbcType="INTEGER" property="maxNumber" />
+    <result column="week_flag" jdbcType="INTEGER" property="weekFlag" />
+    <result column="day_flag" jdbcType="INTEGER" property="dayFlag" />
+    <result column="begin_course" jdbcType="INTEGER" property="beginCourse" />
+    <result column="end_course" jdbcType="INTEGER" property="endCourse" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="video" jdbcType="VARCHAR" property="video" />
+  </resultMap>
+
+  <resultMap id="cou_list" type="golden.tempmodel.CourseList">
+    <id column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="name" jdbcType="VARCHAR" property="cou_name" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="tea_name" jdbcType="VARCHAR" property="tea_name" />
+  </resultMap>
+  
+   <resultMap id="search_cou" type="golden.tempmodel.SearchCourse">
+    <id column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="course_number" jdbcType="VARCHAR" property="courseNumber" />
+    <result column="name" jdbcType="VARCHAR" property="cou_name" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="tea_name" jdbcType="VARCHAR" property="tea_name" />
+    </resultMap>
+
+  <sql id="Base_Column_List">
+    course_id, course_number, teacher_id, name, introduction, outline, image, current_number, 
+    max_number, week_flag, day_flag, begin_course, end_course, area, status, video
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="get_cou" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course
+    where teacher_id = #{tea_id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="get_cou_by_couNum" parameterType="String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course
+    where course_number = #{cou_num,jdbcType=VARCHAR}
+  </select>
+  
+  
+   <select id="get_last_cou_rec" resultMap="BaseResultMap">
+    select 
+    course_number
+    from course
+    where course_id = (select max(course_id) from course)
+  </select>
+  
+  <select id="get_cou_by_teaId" resultMap="BaseResultMap">
+    select 
+    course_number
+    from course
+    where teacher_id = #{tea_id,jdbcType=INTEGER}
+  </select>
+  
+ <!--   联表查询，自然连接，用别名解决字段重名问题-->
+  <select id="get_cou_list_by_stuNum" resultMap="cou_list" parameterType="String">
+  select *,t.name as tea_name from course c, teacher t,student_course s  where c.course_number=s.course_number and c.teacher_id=t.teacher_id and s.student_number=#{stu_num} order by course_id desc
+  </select>
+  
+  
+  <select id="get_cou_Teaname_by_couNum" resultMap="search_cou" parameterType="String">
+  select *,t.name as tea_name from course c, teacher t  where  c.teacher_id=t.teacher_id and c.course_number=#{cou_num}
+  </select>
+  
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="golden.model.Course">
+    insert into course (course_id, course_number, teacher_id, 
+      name, introduction, outline, 
+      image, current_number, max_number, 
+      week_flag, day_flag, begin_course, 
+      end_course, area, status, 
+      video)
+    values (#{courseId,jdbcType=INTEGER}, #{courseNumber,jdbcType=VARCHAR}, #{teacherId,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, #{outline,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR}, #{currentNumber,jdbcType=INTEGER}, #{maxNumber,jdbcType=INTEGER}, 
+      #{weekFlag,jdbcType=INTEGER}, #{dayFlag,jdbcType=INTEGER}, #{beginCourse,jdbcType=INTEGER}, 
+      #{endCourse,jdbcType=INTEGER}, #{area,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{video,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="golden.model.Course">
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="courseNumber != null">
+        course_number,
+      </if>
+      <if test="teacherId != null">
+        teacher_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="introduction != null">
+        introduction,
+      </if>
+      <if test="outline != null">
+        outline,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="currentNumber != null">
+        current_number,
+      </if>
+      <if test="maxNumber != null">
+        max_number,
+      </if>
+      <if test="weekFlag != null">
+        week_flag,
+      </if>
+      <if test="dayFlag != null">
+        day_flag,
+      </if>
+      <if test="beginCourse != null">
+        begin_course,
+      </if>
+      <if test="endCourse != null">
+        end_course,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="video != null">
+        video,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="courseNumber != null">
+        #{courseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherId != null">
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null">
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="outline != null">
+        #{outline,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="currentNumber != null">
+        #{currentNumber,jdbcType=INTEGER},
+      </if>
+      <if test="maxNumber != null">
+        #{maxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="weekFlag != null">
+        #{weekFlag,jdbcType=INTEGER},
+      </if>
+      <if test="dayFlag != null">
+        #{dayFlag,jdbcType=INTEGER},
+      </if>
+      <if test="beginCourse != null">
+        #{beginCourse,jdbcType=INTEGER},
+      </if>
+      <if test="endCourse != null">
+        #{endCourse,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="video != null">
+        #{video,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="golden.model.Course">
+    update course
+    <set>
+      <if test="courseNumber != null">
+        course_number = #{courseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherId != null">
+        teacher_id = #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null">
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="outline != null">
+        outline = #{outline,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="currentNumber != null">
+        current_number = #{currentNumber,jdbcType=INTEGER},
+      </if>
+      <if test="maxNumber != null">
+        max_number = #{maxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="weekFlag != null">
+        week_flag = #{weekFlag,jdbcType=INTEGER},
+      </if>
+      <if test="dayFlag != null">
+        day_flag = #{dayFlag,jdbcType=INTEGER},
+      </if>
+      <if test="beginCourse != null">
+        begin_course = #{beginCourse,jdbcType=INTEGER},
+      </if>
+      <if test="endCourse != null">
+        end_course = #{endCourse,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="video != null">
+        video = #{video,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="golden.model.Course">
+    update course
+    set 
+      name = #{name,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      outline = #{outline,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      max_number = #{maxNumber,jdbcType=INTEGER},
+      week_flag = #{weekFlag,jdbcType=INTEGER},
+      day_flag = #{dayFlag,jdbcType=INTEGER},
+      begin_course = #{beginCourse,jdbcType=INTEGER},
+      end_course = #{endCourse,jdbcType=INTEGER},
+      area = #{area,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      video = #{video,jdbcType=VARCHAR}
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+</mapper>

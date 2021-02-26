@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="golden.mapper.ResourceMapper">
+  <resultMap id="BaseResultMap" type="golden.model.Resource">
+    <id column="resource_id" jdbcType="INTEGER" property="resourceId" />
+    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="audio" jdbcType="VARCHAR" property="audio" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resource_id, teacher_id, text, image, audio
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resource
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="get_res"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resource
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from resource
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="golden.model.Resource">
+    insert into resource (resource_id, teacher_id, text, 
+      image, audio)
+    values (#{resourceId,jdbcType=INTEGER}, #{teacherId,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR}, #{audio,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="golden.model.Resource">
+    insert into resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="resourceId != null">
+        resource_id,
+      </if>
+      <if test="teacherId != null">
+        teacher_id,
+      </if>
+      <if test="text != null">
+        text,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="audio != null">
+        audio,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="resourceId != null">
+        #{resourceId,jdbcType=INTEGER},
+      </if>
+      <if test="teacherId != null">
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="audio != null">
+        #{audio,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="golden.model.Resource">
+    update resource
+    <set>
+      <if test="teacherId != null">
+        teacher_id = #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="text != null">
+        text = #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="audio != null">
+        audio = #{audio,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="golden.model.Resource">
+    update resource
+    set teacher_id = #{teacherId,jdbcType=INTEGER},
+      text = #{text,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      audio = #{audio,jdbcType=VARCHAR}
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </update>
+</mapper>

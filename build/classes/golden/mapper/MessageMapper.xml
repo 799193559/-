@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="golden.mapper.MessageMapper">
+  <resultMap id="BaseResultMap" type="golden.model.Message">
+    <id column="message_id" jdbcType="INTEGER" property="messageId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="question" jdbcType="VARCHAR" property="question" />
+    <result column="reply" jdbcType="VARCHAR" property="reply" />
+    <result column="question_time" jdbcType="TIMESTAMP" property="questionTime" />
+    <result column="reply_time" jdbcType="TIMESTAMP" property="replyTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="rep_audio" jdbcType="VARCHAR" property="repAudio" />
+    <result column="que_audio" jdbcType="VARCHAR" property="queAudio" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    message_id, student_id, teacher_id, course_id, question, reply, question_time, reply_time, 
+    status, rep_audio, que_audio
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="get_mes_by_teaId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="get_mes" parameterType="golden.model.Message" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where course_id = #{courseId,jdbcType=INTEGER} and student_id = #{studentId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from message
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="golden.model.Message">
+    insert into message (message_id, student_id, teacher_id, 
+      course_id, question, reply, 
+      question_time, reply_time, status, 
+      rep_audio, que_audio)
+    values (#{messageId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{teacherId,jdbcType=INTEGER}, 
+      #{courseId,jdbcType=INTEGER}, #{question,jdbcType=VARCHAR}, #{reply,jdbcType=VARCHAR}, 
+      #{questionTime,jdbcType=TIMESTAMP}, #{replyTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{repAudio,jdbcType=VARCHAR}, #{queAudio,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="golden.model.Message">
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="messageId != null">
+        message_id,
+      </if>
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="teacherId != null">
+        teacher_id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="question != null">
+        question,
+      </if>
+      <if test="reply != null">
+        reply,
+      </if>
+      <if test="questionTime != null">
+        question_time,
+      </if>
+      <if test="replyTime != null">
+        reply_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="repAudio != null">
+        rep_audio,
+      </if>
+      <if test="queAudio != null">
+        que_audio,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="messageId != null">
+        #{messageId,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="teacherId != null">
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="question != null">
+        #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="reply != null">
+        #{reply,jdbcType=VARCHAR},
+      </if>
+      <if test="questionTime != null">
+        #{questionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyTime != null">
+        #{replyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="repAudio != null">
+        #{repAudio,jdbcType=VARCHAR},
+      </if>
+      <if test="queAudio != null">
+        #{queAudio,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="golden.model.Message">
+    update message
+    <set>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="teacherId != null">
+        teacher_id = #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="question != null">
+        question = #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="reply != null">
+        reply = #{reply,jdbcType=VARCHAR},
+      </if>
+      <if test="questionTime != null">
+        question_time = #{questionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyTime != null">
+        reply_time = #{replyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="repAudio != null">
+        rep_audio = #{repAudio,jdbcType=VARCHAR},
+      </if>
+      <if test="queAudio != null">
+        que_audio = #{queAudio,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="golden.model.Message">
+    update message
+    set student_id = #{studentId,jdbcType=INTEGER},
+      teacher_id = #{teacherId,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      question = #{question,jdbcType=VARCHAR},
+      reply = #{reply,jdbcType=VARCHAR},
+      question_time = #{questionTime,jdbcType=TIMESTAMP},
+      reply_time = #{replyTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      rep_audio = #{repAudio,jdbcType=VARCHAR},
+      que_audio = #{queAudio,jdbcType=VARCHAR}
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="upd_mes" parameterType="golden.model.Message">
+    update message
+    set 
+      reply = #{reply,jdbcType=VARCHAR},
+      reply_time = #{replyTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      rep_audio = #{repAudio,jdbcType=VARCHAR}
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

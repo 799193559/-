@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="golden.mapper.StudentHomeworkMapper">
+  <resultMap id="BaseResultMap" type="golden.model.StudentHomework">
+    <id column="student_homework_id" jdbcType="INTEGER" property="studentHomeworkId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="homework_id" jdbcType="INTEGER" property="homeworkId" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="answer_time" jdbcType="TIMESTAMP" property="answerTime" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="audio" jdbcType="VARCHAR" property="audio" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    student_homework_id, student_id, course_id, homework_id, answer, answer_time, score, 
+    status, image, audio
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from student_homework
+    where student_homework_id = #{studentHomeworkId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="get_stu_hom" parameterType="golden.model.StudentHomework" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from student_homework
+    where homework_id = #{homeworkId,jdbcType=INTEGER} and student_id = #{studentId,jdbcType=INTEGER}
+  </select>	
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from student_homework
+    where student_homework_id = #{studentHomeworkId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="golden.model.StudentHomework">
+    insert into student_homework (student_homework_id, student_id, course_id, 
+      homework_id, answer, answer_time, 
+      score, status, image, 
+      audio)
+    values (#{studentHomeworkId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, 
+      #{homeworkId,jdbcType=INTEGER}, #{answer,jdbcType=VARCHAR}, #{answerTime,jdbcType=TIMESTAMP}, 
+      #{score,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{image,jdbcType=VARCHAR}, 
+      #{audio,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="golden.model.StudentHomework">
+    insert into student_homework
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="studentHomeworkId != null">
+        student_homework_id,
+      </if>
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="homeworkId != null">
+        homework_id,
+      </if>
+      <if test="answer != null">
+        answer,
+      </if>
+      <if test="answerTime != null">
+        answer_time,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="audio != null">
+        audio,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="studentHomeworkId != null">
+        #{studentHomeworkId,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="homeworkId != null">
+        #{homeworkId,jdbcType=INTEGER},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="answerTime != null">
+        #{answerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="audio != null">
+        #{audio,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="golden.model.StudentHomework">
+    update student_homework
+    <set>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="homeworkId != null">
+        homework_id = #{homeworkId,jdbcType=INTEGER},
+      </if>
+      <if test="answer != null">
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="answerTime != null">
+        answer_time = #{answerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="audio != null">
+        audio = #{audio,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where student_homework_id = #{studentHomeworkId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="golden.model.StudentHomework">
+    update student_homework
+    set student_id = #{studentId,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      homework_id = #{homeworkId,jdbcType=INTEGER},
+      answer = #{answer,jdbcType=VARCHAR},
+      answer_time = #{answerTime,jdbcType=TIMESTAMP},
+      score = #{score,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      image = #{image,jdbcType=VARCHAR},
+      audio = #{audio,jdbcType=VARCHAR}
+    where student_homework_id = #{studentHomeworkId,jdbcType=INTEGER}
+  </update>
+</mapper>
